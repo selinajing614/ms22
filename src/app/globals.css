@@ -35,6 +35,48 @@ body {
 @tailwind components;
 @tailwind utilities;
 
+/* 像素风格字体 */
+@font-face {
+  font-family: 'PixelFont';
+  src: url('/fonts/PressStart2P-Regular.ttf') format('truetype');
+}
+
+.pixel-font {
+  font-family: 'PixelFont', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* 复古播放器样式 */
+.retro-player {
+  image-rendering: pixelated;
+  box-shadow: 
+    0 0 0 4px #2A2B2E,
+    0 0 0 8px #E8E3D5;
+}
+
+/* 按钮像素风格 */
+.pixel-button {
+  image-rendering: pixelated;
+  transition: all 0.2s ease;
+}
+
+.pixel-button:active {
+  transform: scale(0.95);
+}
+
+/* 进度条像素风格 */
+.progress-bar {
+  image-rendering: pixelated;
+  background: repeating-linear-gradient(
+    90deg,
+    #8FB4C7,
+    #8FB4C7 10px,
+    #85301C 10px,
+    #85301C 20px
+  );
+}
+
 @keyframes textScanline {
   0% {
     transform: translateY(-100%);
