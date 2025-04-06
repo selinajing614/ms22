@@ -4,7 +4,7 @@
  */
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 interface VoiceClip {
@@ -53,7 +53,15 @@ export default function Level2() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [ratings, setRatings] = useState<Record<number, string>>({});
+  const [fadeOut, setFadeOut] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  // 监听音频加载完成事件
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.load();
+    }
+  }, [currentClip]);
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -67,18 +75,33 @@ export default function Level2() {
   };
 
   const handleRating = (rating: string) => {
+    // 设置淡出动画
+    setFadeOut(true);
+    
+    // 停止当前音频
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    
+    // 保存评分
     setRatings(prev => ({
       ...prev,
       [currentClip]: rating
     }));
-    
-    if (currentClip < voiceClips.length - 1) {
-      setCurrentClip(prev => prev + 1);
-      setIsPlaying(false);
-      if (audioRef.current) {
-        audioRef.current.currentTime = 0;
+
+    // 延迟切换到下一个音频，等待淡出动画完成
+    setTimeout(() => {
+      if (currentClip < voiceClips.length - 1) {
+        setCurrentClip(prev => prev + 1);
+        setIsPlaying(false);
+        setProgress(0);
+      } else {
+        // 所有音频评分完成，显示完成信息
+        router.push('/game/level3');
       }
-    }
+      setFadeOut(false);
+    }, 500);
   };
 
   const handleTimeUpdate = () => {
@@ -96,100 +119,101 @@ export default function Level2() {
             LEVEL 2 — CLEAR COMMUNICATION
           </h1>
           <p className="text-xl text-[#85301C]">
-            Clarity is key to retention. Please choose the voice that sounds most understandable to users.
+            FeedLogic is learning to detect clarity in creator voices. Please evaluate how understandable each voice is.
           </p>
         </div>
 
         {/* 复古风格音频播放器 */}
-        <div className="bg-[#E8E3D5] p-6 rounded-lg border-4 border-[#2A2B2E] shadow-lg mb-8 max-w-2xl mx-auto">
-          <div className="text-[#2A2B2E] text-2xl font-bold pixel-font mb-4">
-            {voiceClips[currentClip].title}
-          </div>
-          
-          {/* 进度条 */}
-          <div className="bg-[#8FB4C7] h-8 rounded mb-4 relative overflow-hidden">
-            <div 
-              className="bg-[#85301C] h-full transition-all duration-100"
-              style={{ width: `${progress}%` }}
-            >
-              <div className="absolute left-1/2 top-1/2 w-4 h-4 bg-[#2A2B2E] rounded-full transform -translate-x-1/2 -translate-y-1/2" />
+        <div className={`transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
+          <div className="bg-[#E8E3D5] p-6 rounded-lg border-4 border-[#2A2B2E] shadow-lg mb-8 max-w-2xl mx-auto retro-player">
+            <div className="text-[#2A2B2E] text-2xl font-bold pixel-font mb-4">
+              {voiceClips[currentClip].title}
             </div>
+            
+            {/* 进度条 */}
+            <div className="bg-[#2A2B2E] h-8 rounded-none p-1 mb-4 relative overflow-hidden">
+              <div 
+                className="h-full bg-[#85301C] transition-all duration-100 relative"
+                style={{ width: `${progress}%` }}
+              >
+                <div className="absolute right-0 top-0 h-full w-2 bg-[#2A2B2E]"></div>
+              </div>
+            </div>
+
+            <div className="text-[#2A2B2E] mb-4 pixel-font text-sm text-center">
+              Is the recording good quality?
+            </div>
+
+            {/* 控制按钮 */}
+            <div className="flex justify-center gap-4">
+              <button
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
+                  }
+                }}
+                className="w-12 h-12 bg-[#2A2B2E] text-white rounded pixel-button flex items-center justify-center"
+              >
+                ⏮
+              </button>
+              <button
+                onClick={handlePlayPause}
+                className="w-12 h-12 bg-[#2A2B2E] text-white rounded pixel-button flex items-center justify-center"
+              >
+                {isPlaying ? '⏸' : '▶'}
+              </button>
+              <button
+                onClick={() => {
+                  if (audioRef.current) {
+                    audioRef.current.currentTime = Math.min(
+                      audioRef.current.duration,
+                      audioRef.current.currentTime + 5
+                    );
+                  }
+                }}
+                className="w-12 h-12 bg-[#2A2B2E] text-white rounded pixel-button flex items-center justify-center"
+              >
+                ⏭
+              </button>
+            </div>
+
+            <audio
+              ref={audioRef}
+              src={voiceClips[currentClip].audioSrc}
+              onTimeUpdate={handleTimeUpdate}
+              onEnded={() => setIsPlaying(false)}
+            />
           </div>
 
-          {/* 预览文本 */}
-          <div className="text-[#2A2B2E] mb-4 italic">
-            "{voiceClips[currentClip].preview}"
-          </div>
-
-          {/* 控制按钮 */}
-          <div className="flex justify-center gap-4">
+          {/* 评分按钮 */}
+          <div className="flex justify-center gap-6 mt-8">
             <button
-              onClick={() => {
-                if (audioRef.current) {
-                  audioRef.current.currentTime = Math.max(0, audioRef.current.currentTime - 5);
-                }
-              }}
-              className="w-12 h-12 bg-[#2A2B2E] text-white rounded flex items-center justify-center hover:bg-[#85301C] transition-colors"
+              onClick={() => handleRating('Clear')}
+              className="px-8 py-4 bg-[#4CAF50] text-white rounded-lg text-xl font-bold pixel-button
+                       hover:bg-[#45a049] transition-colors transform hover:scale-105"
             >
-              ⏮
+              Clear
             </button>
             <button
-              onClick={handlePlayPause}
-              className="w-12 h-12 bg-[#2A2B2E] text-white rounded flex items-center justify-center hover:bg-[#85301C] transition-colors"
+              onClick={() => handleRating('Moderate')}
+              className="px-8 py-4 bg-[#FFA726] text-white rounded-lg text-xl font-bold pixel-button
+                       hover:bg-[#FB8C00] transition-colors transform hover:scale-105"
             >
-              {isPlaying ? '⏸' : '▶'}
+              Moderate
             </button>
             <button
-              onClick={() => {
-                if (audioRef.current) {
-                  audioRef.current.currentTime = Math.min(
-                    audioRef.current.duration,
-                    audioRef.current.currentTime + 5
-                  );
-                }
-              }}
-              className="w-12 h-12 bg-[#2A2B2E] text-white rounded flex items-center justify-center hover:bg-[#85301C] transition-colors"
+              onClick={() => handleRating('Unclear')}
+              className="px-8 py-4 bg-[#E53935] text-white rounded-lg text-xl font-bold pixel-button
+                       hover:bg-[#D32F2F] transition-colors transform hover:scale-105"
             >
-              ⏭
+              Unclear
             </button>
           </div>
 
-          <audio
-            ref={audioRef}
-            src={voiceClips[currentClip].audioSrc}
-            onTimeUpdate={handleTimeUpdate}
-            onEnded={() => setIsPlaying(false)}
-          />
-        </div>
-
-        {/* 评分按钮 */}
-        <div className="flex justify-center gap-6 mt-8">
-          <button
-            onClick={() => handleRating('Clear')}
-            className="px-8 py-4 bg-[#4CAF50] text-white rounded-lg text-xl font-bold
-                     hover:bg-[#45a049] transition-colors transform hover:scale-105"
-          >
-            Clear
-          </button>
-          <button
-            onClick={() => handleRating('Moderate')}
-            className="px-8 py-4 bg-[#FFA726] text-white rounded-lg text-xl font-bold
-                     hover:bg-[#FB8C00] transition-colors transform hover:scale-105"
-          >
-            Moderate
-          </button>
-          <button
-            onClick={() => handleRating('Unclear')}
-            className="px-8 py-4 bg-[#E53935] text-white rounded-lg text-xl font-bold
-                     hover:bg-[#D32F2F] transition-colors transform hover:scale-105"
-          >
-            Unclear
-          </button>
-        </div>
-
-        {/* 进度指示器 */}
-        <div className="mt-8 text-center text-[#85301C]">
-          Voice Clip {currentClip + 1} of {voiceClips.length}
+          {/* 进度指示器 */}
+          <div className="mt-8 text-center text-[#85301C] pixel-font">
+            Voice Clip {currentClip + 1} of {voiceClips.length}
+          </div>
         </div>
       </div>
     </main>

@@ -65,25 +65,87 @@ body {
   transform: scale(0.95);
 }
 
-/* 进度条像素风格 */
-.progress-bar {
-  image-rendering: pixelated;
-  background: repeating-linear-gradient(
-    90deg,
-    #8FB4C7,
-    #8FB4C7 10px,
-    #85301C 10px,
-    #85301C 20px
-  );
+/* 动画效果 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-@keyframes textScanline {
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceIn {
   0% {
-    transform: translateY(-100%);
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.1);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0.89);
   }
   100% {
-    transform: translateY(100%);
+    opacity: 1;
+    transform: scale(1);
   }
+}
+
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slideIn {
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+.animate-bounceIn {
+  animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+.animate-pop {
+  animation: pop 0.3s ease-in-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.2s ease-out forwards;
 }
 
 @keyframes screenFlicker {
@@ -107,12 +169,12 @@ body {
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
+@keyframes textScanline {
+  0% {
+    transform: translateY(-100%);
   }
-  to {
-    opacity: 1;
+  100% {
+    transform: translateY(100%);
   }
 }
 
