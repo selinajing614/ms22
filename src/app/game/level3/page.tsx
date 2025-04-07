@@ -17,7 +17,7 @@ interface Thumbnail {
 // 30张不同风格的缩略图
 const thumbnails: Thumbnail[] = Array.from({ length: 30 }, (_, i) => ({
   id: i + 1,
-  imageSrc: `/thumbnails/${i + 1}.png`,
+  imageSrc: `https://raw.githubusercontent.com/你的用户名/你的仓库名/main/public/thumbnails/${i + 1}.png`,
   style: `Style ${i + 1}`
 }));
 
@@ -171,6 +171,7 @@ export default function Level3() {
                          20vw"
                   className="object-cover rounded-lg transition-all duration-300
                            group-hover:brightness-110"
+                  unoptimized
                 />
                 {selectedThumbnails.includes(thumb.id) && (
                   <div className="absolute top-2 right-2 w-6 h-6 bg-[#85301C] text-white rounded-full
