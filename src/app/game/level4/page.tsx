@@ -24,42 +24,42 @@ const STEP_SIZE = 1000;
 const brands: Brand[] = [
   {
     id: 1,
-    name: "LUXE Beauty",
-    description: "国际美妆品牌的精致视频广告，专业制作团队打造",
+    name: "GlowSkin Global",
+    description: "A premium skincare brand known for flawless studio-quality ads.",
     image: "/brands/luxury-beauty.png",
-    style: "高端时尚",
+    style: "Premium Fashion",
     budget: 0
   },
   {
     id: 2,
-    name: "手作匠心",
-    description: "本地手工艺人用手机记录的真实制作过程",
+    name: "Hannah's Handmade Soap",
+    description: "A small business sharing personal, homemade products in casual videos.",
     image: "/brands/handcraft.png",
-    style: "本土文化",
+    style: "Local Culture",
     budget: 0
   },
   {
     id: 3,
-    name: "Life With Amy",
-    description: "知名生活方式博主的个人化妆品使用体验",
-    image: "/brands/blogger.png",
-    style: "个人影响力",
+    name: "EcoRise Naturals",
+    description: "A minimalist eco-brand focused on sustainability and clean visuals.",
+    image: "/brands/eco.png",
+    style: "Sustainable Eco",
     budget: 0
   },
   {
     id: 4,
-    name: "ECO Pure",
-    description: "极简风格的环保护肤品牌故事",
-    image: "/brands/eco.png",
-    style: "可持续环保",
+    name: "FlexFuel Energy Drink",
+    description: "A bold, high-energy drink promoted through fast-paced, influencer-style edits.",
+    image: "/brands/blogger.png",
+    style: "Personal Influence",
     budget: 0
   },
   {
     id: 5,
-    name: "SKIN Science",
-    description: "纯产品功效展示，无人物出镜的科技感广告",
+    name: "CareCircle Mental Health App",
+    description: "A gentle wellness brand using calm visuals and emotional storytelling",
     image: "/brands/product.png",
-    style: "科技理性",
+    style: "Tech Rational",
     budget: 0
   }
 ];
@@ -108,9 +108,7 @@ export default function Level4() {
 
   // 完成分配
   const handleComplete = () => {
-    if (remainingBudget === 0) {
-      router.push('/game/results');
-    }
+    router.push('/game/level5');
   };
 
   if (showIntro) {
@@ -159,12 +157,13 @@ export default function Level4() {
               <div key={brand.id} className="p-4 bg-[#E8E3D5] rounded-lg border-2 border-[#2A2B2E] hover:shadow-lg transition-all">
                 <div className="flex gap-6">
                   {/* 品牌图片 */}
-                  <div className="relative w-40 h-40 rounded-lg overflow-hidden border-2 border-[#2A2B2E]">
+                  <div className="relative w-32 aspect-[9/16] mb-4 border-2 border-[#2A2B2E]">
                     <Image
                       src={brand.image}
                       alt={brand.name}
                       fill
                       className="object-cover"
+                      unoptimized
                     />
                   </div>
 
