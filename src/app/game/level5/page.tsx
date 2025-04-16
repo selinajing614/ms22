@@ -72,62 +72,59 @@ function RetroRobot() {
     return () => clearInterval(talkingInterval);
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="relative flex items-start gap-12 mb-6">
-        {/* 静态渲染版本 */}
-        <svg width="220" height="280" viewBox="0 0 120 160" style={{imageRendering:'pixelated'}}>
-          {/* 机器人头部 */}
-          <rect x="30" y="20" width="60" height="50" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <line x1="60" y1="10" x2="60" y2="20" stroke="#85301C" strokeWidth="4"/>
-          <circle cx="60" cy="8" r="4" fill="#85301C"/>
-          <rect x="40" y="35" width="15" height="15" fill="#85301C"/>
-          <rect x="65" y="35" width="15" height="15" fill="#85301C"/>
-          <rect x="45" y="55" width="30" height="5" fill="#85301C"/>
-          <rect x="35" y="75" width="50" height="60" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <circle cx="60" cy="95" r="5" fill="#85301C"/>
-          <circle cx="60" cy="110" r="5" fill="#85301C"/>
-          <rect x="15" y="85" width="20" height="10" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <rect x="85" y="85" width="20" height="10" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <rect x="40" y="135" width="15" height="25" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <rect x="65" y="135" width="15" height="25" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-        </svg>
-        
-        {/* 静态对话气泡 */}
-        <div className="w-[1100px] mt-4">
-          <div className="relative bg-[#E8E3D5] p-8 rounded-lg border-4 border-[#85301C] pixel-font">
-            <div className="absolute -left-6 top-8 w-0 h-0 
-                          border-t-[12px] border-t-transparent
-                          border-r-[24px] border-r-[#85301C]
-                          border-b-[12px] border-b-transparent">
-            </div>
-            <div className="absolute -left-[18px] top-8 w-0 h-0 
-                          border-t-[12px] border-t-transparent
-                          border-r-[24px] border-r-[#E8E3D5]
-                          border-b-[12px] border-b-transparent">
-            </div>
-            <div className="space-y-4">
-              <p className="text-[#85301C] text-2xl">
-                Welcome to the "Historical Content Repromotion System"
-              </p>
-              <p className="text-[#85301C] text-2xl">
-                Your task is to select the most worthy videos for repromotion from several existing ones.
-              </p>
-              <p className="text-[#85301C] text-2xl">
-                Sort them from "Highest Priority" to "Lowest Priority" based on their performance metrics.
-              </p>
-            </div>
+  // 静态渲染版本
+  const staticRobot = (
+    <div className="relative flex items-start gap-12 mb-6">
+      <svg width="220" height="280" viewBox="0 0 120 160" style={{imageRendering:'pixelated'}}>
+        {/* 机器人头部 */}
+        <rect x="30" y="20" width="60" height="50" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <line x1="60" y1="10" x2="60" y2="20" stroke="#85301C" strokeWidth="4"/>
+        <circle cx="60" cy="8" r="4" fill="#85301C"/>
+        <rect x="40" y="35" width="15" height="15" fill="#85301C"/>
+        <rect x="65" y="35" width="15" height="15" fill="#85301C"/>
+        <rect x="45" y="55" width="30" height="5" fill="#85301C"/>
+        <rect x="35" y="75" width="50" height="60" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <circle cx="60" cy="95" r="5" fill="#85301C"/>
+        <circle cx="60" cy="110" r="5" fill="#85301C"/>
+        <rect x="15" y="85" width="20" height="10" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <rect x="85" y="85" width="20" height="10" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <rect x="40" y="135" width="15" height="25" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <rect x="65" y="135" width="15" height="25" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+      </svg>
+      
+      {/* 静态对话气泡 */}
+      <div className="w-[1100px] mt-4">
+        <div className="relative bg-[#E8E3D5] p-8 rounded-lg border-4 border-[#85301C] pixel-font">
+          <div className="absolute -left-6 top-8 w-0 h-0 
+                        border-t-[12px] border-t-transparent
+                        border-r-[24px] border-r-[#85301C]
+                        border-b-[12px] border-b-transparent">
+          </div>
+          <div className="absolute -left-[18px] top-8 w-0 h-0 
+                        border-t-[12px] border-t-transparent
+                        border-r-[24px] border-r-[#E8E3D5]
+                        border-b-[12px] border-b-transparent">
+          </div>
+          <div className="space-y-4">
+            <p className="text-[#85301C] text-2xl">
+              Welcome to the "Historical Content Repromotion System"
+            </p>
+            <p className="text-[#85301C] text-2xl">
+              Your task is to select the most worthy videos for repromotion from several existing ones.
+            </p>
+            <p className="text-[#85301C] text-2xl">
+              Sort them from "Highest Priority" to "Lowest Priority" based on their performance metrics.
+            </p>
           </div>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
 
-  return (
+  // 动态渲染版本
+  const dynamicRobot = (
     <div className="relative flex items-start gap-12 mb-6">
-      {/* 动态版本的机器人和对话框 */}
       <svg width="220" height="280" viewBox="0 0 120 160" style={{imageRendering:'pixelated'}}>
-        {/* ... existing robot SVG code ... */}
         <rect x="30" y="20" width="60" height="50" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
         <line x1="60" y1="10" x2="60" y2="20" stroke="#85301C" strokeWidth="4"/>
         <circle cx="60" cy="8" r="4" fill="#85301C"/>
@@ -178,6 +175,8 @@ function RetroRobot() {
       </div>
     </div>
   );
+
+  return mounted ? dynamicRobot : staticRobot;
 }
 
 /**
@@ -210,26 +209,25 @@ function EyeWithLine() {
     };
   }, []);
 
-  if (!mounted) {
-    return (
-      <div className="flex flex-col items-center mb-4 select-none">
-        <svg width="120" height="80" viewBox="0 0 120 80" style={{imageRendering:'pixelated', marginBottom: '-8px'}}>
-          <rect x="4" y="4" width="112" height="64" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
-          <rect x="16" y="16" width="88" height="40" fill="#E8E3D5" stroke="#85301C" strokeWidth="3"/>
-          <ellipse cx="60" cy="36" rx="28" ry="16" fill="#E8E3D5" stroke="#85301C" strokeWidth="3"/>
-          <ellipse cx="60" cy="36" rx="10" ry="10" fill="#85301C"/>
-          <rect x="56" y="30" width="4" height="4" fill="#E8E3D5" opacity="0.7"/>
-          <rect x="16" y="16" width="88" height="40" fill="none" stroke="#85301C" strokeWidth="1"/>
-          <rect x="8" y="8" width="4" height="56" fill="none" stroke="#85301C" strokeWidth="2"/>
-          <rect x="108" y="8" width="4" height="56" fill="none" stroke="#85301C" strokeWidth="2"/>
-        </svg>
-      </div>
-    );
-  }
-
-  return (
+  // 静态渲染版本
+  const staticEye = (
     <div className="flex flex-col items-center mb-4 select-none">
-      {/* ... existing EyeWithLine SVG code ... */}
+      <svg width="120" height="80" viewBox="0 0 120 80" style={{imageRendering:'pixelated', marginBottom: '-8px'}}>
+        <rect x="4" y="4" width="112" height="64" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
+        <rect x="16" y="16" width="88" height="40" fill="#E8E3D5" stroke="#85301C" strokeWidth="3"/>
+        <ellipse cx="60" cy="36" rx="28" ry="16" fill="#E8E3D5" stroke="#85301C" strokeWidth="3"/>
+        <ellipse cx="60" cy="36" rx="10" ry="10" fill="#85301C"/>
+        <rect x="56" y="30" width="4" height="4" fill="#E8E3D5" opacity="0.7"/>
+        <rect x="16" y="16" width="88" height="40" fill="none" stroke="#85301C" strokeWidth="1"/>
+        <rect x="8" y="8" width="4" height="56" fill="none" stroke="#85301C" strokeWidth="2"/>
+        <rect x="108" y="8" width="4" height="56" fill="none" stroke="#85301C" strokeWidth="2"/>
+      </svg>
+    </div>
+  );
+
+  // 动态渲染版本
+  const dynamicEye = (
+    <div className="flex flex-col items-center mb-4 select-none">
       <svg width="120" height="80" viewBox="0 0 120 80" style={{imageRendering:'pixelated', marginBottom: '-8px'}}>
         <rect x="4" y="4" width="112" height="64" fill="#E8E3D5" stroke="#85301C" strokeWidth="4"/>
         <rect x="16" y="16" width="88" height="40" fill="#E8E3D5" stroke="#85301C" strokeWidth="3"/>
@@ -256,12 +254,15 @@ function EyeWithLine() {
       </svg>
     </div>
   );
+
+  return mounted ? dynamicEye : staticEye;
 }
 
 export default function Level5() {
   const router = useRouter();
   const [items, setItems] = useState(videos);
   const [isComplete, setIsComplete] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -269,6 +270,10 @@ export default function Level5() {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   );
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
@@ -287,13 +292,56 @@ export default function Level5() {
     router.push('/game/results');
   };
 
+  // 固定的ID生成器
+  const generateId = () => 'fixed-id';
+
+  // 静态渲染版本
+  const staticContent = (
+    <div className="space-y-4">
+      {videos.map((video, index) => (
+        <SortableItem
+          key={video.id}
+          id={video.id}
+          index={index + 1}
+          title={video.title}
+          publishDate={video.publishDate}
+          likes={video.likes}
+          comments={video.comments}
+        />
+      ))}
+    </div>
+  );
+
+  // 动态渲染版本
+  const dynamicContent = (
+    <DndContext 
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+      id={generateId()}
+    >
+      <SortableContext items={items.map(v => v.id)} strategy={verticalListSortingStrategy}>
+        <div className="space-y-4">
+          {items.map((video, index) => (
+            <SortableItem
+              key={video.id}
+              id={video.id}
+              index={index + 1}
+              title={video.title}
+              publishDate={video.publishDate}
+              likes={video.likes}
+              comments={video.comments}
+            />
+          ))}
+        </div>
+      </SortableContext>
+    </DndContext>
+  );
+
   return (
     <main className="min-h-screen bg-[#8FB4C7] p-8">
       <div className="max-w-[1440px] mx-auto">
-        {/* 眼睛和数据线 */}
         <EyeWithLine />
-        
-        {/* 机器人和对话框 */}
         <RetroRobot />
         
         <div className="bg-[#F5F0E2] p-8 rounded-lg shadow-xl animate-fadeIn border-4 border-[#2A2B2E] retro-player">
@@ -301,30 +349,7 @@ export default function Level5() {
             LEVEL 5 — CONTENT PERFORMANCE SORTING
           </h1>
 
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-          >
-            <SortableContext
-              items={items}
-              strategy={verticalListSortingStrategy}
-            >
-              <div className="space-y-4">
-                {items.map((video, index) => (
-                  <SortableItem
-                    key={video.id}
-                    id={video.id}
-                    index={index + 1}
-                    title={video.title}
-                    publishDate={video.publishDate}
-                    likes={video.likes}
-                    comments={video.comments}
-                  />
-                ))}
-              </div>
-            </SortableContext>
-          </DndContext>
+          {mounted ? dynamicContent : staticContent}
 
           {isComplete && (
             <div className="mt-8 text-center">

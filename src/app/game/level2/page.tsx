@@ -53,6 +53,7 @@ const voiceClips: VoiceClip[] = [
 function RetroTapeRecorder() {
   const [mounted, setMounted] = useState(false);
   const [speakerScale, setSpeakerScale] = useState(1);
+  const [rotationAngle, setRotationAngle] = useState(0);
 
   useEffect(() => {
     setMounted(true);
@@ -60,7 +61,14 @@ function RetroTapeRecorder() {
       setSpeakerScale(prev => prev === 1 ? 1.1 : 1);
     }, 300);
 
-    return () => clearInterval(talkingInterval);
+    const rotationInterval = setInterval(() => {
+      setRotationAngle(prev => (prev + 5) % 360);
+    }, 100);
+
+    return () => {
+      clearInterval(talkingInterval);
+      clearInterval(rotationInterval);
+    };
   }, []);
 
   if (!mounted) {
@@ -152,12 +160,12 @@ function RetroTapeRecorder() {
         {/* 磁带窗口 */}
         <rect x="55" y="45" width="30" height="50" fill="#2A2B2E" stroke="#85301C" strokeWidth="2"/>
         {/* 磁带轮 - 动态旋转 */}
-        <g transform={`rotate(${Date.now() / 50 % 360}, 65, 60)`}>
+        <g transform={`rotate(${rotationAngle}, 65, 60)`}>
           <circle cx="65" cy="60" r="8" fill="#E8E3D5" stroke="#85301C" strokeWidth="2"/>
           <line x1="65" y1="52" x2="65" y2="68" stroke="#85301C" strokeWidth="1"/>
           <line x1="57" y1="60" x2="73" y2="60" stroke="#85301C" strokeWidth="1"/>
         </g>
-        <g transform={`rotate(${-Date.now() / 50 % 360}, 75, 80)`}>
+        <g transform={`rotate(${-rotationAngle}, 75, 80)`}>
           <circle cx="75" cy="80" r="8" fill="#E8E3D5" stroke="#85301C" strokeWidth="2"/>
           <line x1="75" y1="72" x2="75" y2="88" stroke="#85301C" strokeWidth="1"/>
           <line x1="67" y1="80" x2="83" y2="80" stroke="#85301C" strokeWidth="1"/>
