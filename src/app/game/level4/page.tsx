@@ -141,6 +141,7 @@ export default function Level4() {
 
   return (
     <main className="min-h-screen bg-[#8FB4C7] p-8">
+      <EyeWithLine />
       <div className="max-w-6xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-[#85301C] animate-slideIn pixel-font">
@@ -247,5 +248,51 @@ export default function Level4() {
         </div>
       </div>
     </main>
+  );
+}
+
+function EyeWithLine() {
+  const [angle, setAngle] = useState(0);
+  const [isBlinking, setIsBlinking] = useState(false);
+  useEffect(() => {
+    const blinkInterval = setInterval(() => {
+      setIsBlinking(true);
+      setTimeout(() => setIsBlinking(false), 180);
+    }, 2600);
+    let direction = 1;
+    let current = 0;
+    const moveInterval = setInterval(() => {
+      if (current > 10) direction = -1;
+      if (current < -10) direction = 1;
+      current += direction * 2;
+      setAngle(current);
+    }, 120);
+    return () => {
+      clearInterval(blinkInterval);
+      clearInterval(moveInterval);
+    };
+  }, []);
+  const mainColor = '#85301C';
+  const bgColor = '#E8E3D5';
+  return (
+    <div className="flex flex-col items-center mb-4 select-none">
+      <svg width="120" height="80" viewBox="0 0 120 80" style={{imageRendering:'pixelated', marginBottom: '-8px'}}>
+        <rect x="4" y="4" width="112" height="64" fill={bgColor} stroke={mainColor} strokeWidth="4"/>
+        <rect x="16" y="16" width="88" height="40" fill={bgColor} stroke={mainColor} strokeWidth="3"/>
+        <ellipse cx="60" cy="36" rx="28" ry="16" fill={bgColor} stroke={mainColor} strokeWidth="3"/>
+        <ellipse
+          cx={60 + Math.sin((angle * Math.PI) / 180) * 7}
+          cy={36}
+          rx="10"
+          ry={isBlinking ? 2 : 10}
+          fill={mainColor}
+          style={{ transition: 'all 0.18s cubic-bezier(.4,2,.6,1)' }}
+        />
+        <rect x={60 + Math.sin((angle * Math.PI) / 180) * 7 - 4} y={isBlinking ? 36 : 30} width={isBlinking ? 1 : 4} height={isBlinking ? 1 : 4} fill={bgColor} opacity="0.7"/>
+        <rect x="16" y="16" width="88" height="40" fill="none" stroke={mainColor} strokeWidth="1"/>
+        <rect x="8" y="8" width="4" height="56" fill="none" stroke={mainColor} strokeWidth="2"/>
+        <rect x="108" y="8" width="4" height="56" fill="none" stroke={mainColor} strokeWidth="2"/>
+      </svg>
+    </div>
   );
 } 
