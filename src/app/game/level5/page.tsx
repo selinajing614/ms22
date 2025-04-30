@@ -289,7 +289,7 @@ export default function Level5() {
   };
 
   const handleComplete = () => {
-    router.push('/game/results');
+    router.push('/game/level6');
   };
 
   // 固定的ID生成器
